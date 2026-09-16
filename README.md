@@ -10,7 +10,31 @@ Copy-Item .env.example .env
 pnpm run dev
 ```
 
-The application is available at `http://localhost:3000` by default. Configure the Laravel origin with `NUXT_PUBLIC_API_BASE` in `.env`.
+The application is available at `http://localhost:3000` by default. Configure `NUXT_PUBLIC_BACKEND_ORIGIN` and the versioned `NUXT_PUBLIC_API_BASE` in `.env`.
+
+## Frontend architecture
+
+The application enforces separation of concerns:
+
+- `app/pages/` composes routes and feature screens.
+- `app/components/` contains presentation grouped by feature or reusable responsibility.
+- `app/composables/` owns shared state, API workflows, URL query state, and notifications.
+- `app/config/` centralizes navigation and UI access rules.
+- `app/types/` defines API, domain, form, navigation, and table contracts.
+- `app/utils/` contains pure formatting, validation, and status-mapping functions.
+
+Laravel remains the authorization, validation, business-rule, and persistence boundary. Nuxt middleware and role-aware navigation only improve the user experience.
+
+## API authentication
+
+The Laravel origin defaults to `http://localhost:8000`, and the API base defaults to `http://localhost:8000/api/v1`. Keep the browser-facing Nuxt and Laravel hostnames consistent so the SPA can read the XSRF cookie:
+
+```env
+NUXT_PUBLIC_BACKEND_ORIGIN=http://localhost:8000
+NUXT_PUBLIC_API_BASE=http://localhost:8000/api/v1
+```
+
+The centralized API client uses Sanctum's first-party CSRF cookie and credentialed session requests. Authentication secrets are never stored in browser storage. Configure the same frontend origins and stateful domains in the Laravel environment.
 
 ## Quality gate
 

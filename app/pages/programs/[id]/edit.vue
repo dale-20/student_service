@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import type { ApiProblem } from '~/types/api'; import type { Program } from '~/types/domain'; import type { FormFieldDefinition } from '~/types/forms'
+definePageMeta({ middleware: 'auth' }); const route = useRoute(); const id = Number(route.params.id); const { find, update } = usePrograms(); const { data: program } = await useAsyncData(`program-edit-${id}`, () => find(id)); if (!program.value) throw createError({ statusCode: 404 })
+const fields: FormFieldDefinition[] = [{ key: 'code', label: 'Program code', required: true }, { key: 'name', label: 'Program name', required: true }, { key: 'status', label: 'Status', type: 'select', required: true, options: [{ label: 'Active', value: 'active' }, { label: 'Inactive', value: 'inactive' }] }]; const errors = ref<Record<string, string[]>>({}); const submitting = ref(false)
+async function save(values: Record<string, string | number>) { submitting.value = true; try { await update(id, values as unknown as Partial<Program>); await navigateTo(`/programs/${id}`) } catch (error) { const problem = error as ApiProblem; errors.value = problem.errors ?? { form: [problem.message] } } finally { submitting.value = false } }
+</script>
+<template><div v-if="program" class="page-shell"><PageHeader title="Edit program" :description="program.name" /><EntityForm :fields="fields" :initial="{ code: program.code, name: program.name, status: program.status }" submit-label="Save changes" :cancel-to="`/programs/${id}`" :submitting="submitting" :server-errors="errors" @submit="save" /></div></template>

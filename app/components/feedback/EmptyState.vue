@@ -1,0 +1,2 @@
+<script setup lang="ts">import { SearchX } from '@lucide/vue'; defineProps<{ title: string; description: string }>()</script>
+<template><div class="surface grid place-items-center px-6 py-14 text-center"><span class="grid size-12 place-items-center rounded-full bg-slate-100 text-slate-500"><SearchX class="size-6" /></span><h2 class="mt-4 font-semibold text-slate-900">{{ title }}</h2><p class="mt-1 max-w-md text-sm text-slate-500">{{ description }}</p><div v-if="$slots.action" class="mt-5"><slot name="action" /></div></div></template>

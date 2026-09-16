@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-600: #15803d;
+  --color-brand-700: #166534;
+  --color-brand-900: #14532d;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html { color-scheme: light; }
+  body { @apply bg-slate-50 text-slate-800 antialiased; }
+  button, a, input, select, textarea { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2; }
+}
+
+@layer components {
+  .page-shell { @apply mx-auto w-full max-w-[1600px] space-y-6 p-4 sm:p-6; }
+  .surface { @apply rounded-xl border border-slate-200 bg-white shadow-sm; }
+  .field-control { @apply min-h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100; }
+}

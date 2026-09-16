@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import type { FormFieldDefinition } from '~/types/forms'
+const props = defineProps<{ fields: FormFieldDefinition[]; initial?: Record<string, string | number>; submitLabel: string; cancelTo: string; submitting?: boolean; serverErrors?: Record<string, string[]> }>()
+const emit = defineEmits<{ submit: [values: Record<string, string | number>] }>()
+const values = reactive<Record<string, string | number>>(Object.fromEntries(props.fields.map(field => [field.key, props.initial?.[field.key] ?? ''])))
+const errors = ref<Record<string, string>>({})
+function submit(): void { errors.value = Object.fromEntries(props.fields.filter(field => field.required && String(values[field.key] ?? '').trim() === '').map(field => [field.key, `${field.label} is required.`])); if (!Object.keys(errors.value).length) emit('submit', { ...values }) }
+</script>
+<template><form class="space-y-6" @submit.prevent="submit"><BaseCard><div class="grid gap-4 sm:grid-cols-2"><FormField v-for="field in fields" :key="field.key" :for="field.key" :label="field.label" :required="field.required" :error="serverErrors?.[field.key]?.[0] ?? errors[field.key]"><BaseSelect v-if="field.type === 'select'" :id="field.key" v-model="values[field.key]!" :options="field.options ?? []" :placeholder="field.placeholder" :invalid="Boolean(serverErrors?.[field.key] || errors[field.key])" /><BaseInput v-else :id="field.key" v-model="values[field.key]!" :type="field.type ?? 'text'" :placeholder="field.placeholder" :invalid="Boolean(serverErrors?.[field.key] || errors[field.key])" /></FormField></div><p v-if="serverErrors?.form" class="mt-4 text-sm text-red-600">{{ serverErrors.form[0] }}</p></BaseCard><div class="flex justify-end gap-3"><BaseButton :to="cancelTo" variant="secondary">Cancel</BaseButton><BaseButton type="submit" :loading="submitting" :disabled="submitting">{{ submitLabel }}</BaseButton></div></form></template>

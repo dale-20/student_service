@@ -1,0 +1,2 @@
+<script setup lang="ts">definePageMeta({ middleware: 'auth' }); const route = useRoute(); const id = Number(route.params.id); const { find } = useCourseOfferings(); const { data: offering } = await useAsyncData(`offering-edit-${id}`, () => find(id)); async function saved() { await navigateTo(`/course-offerings/${id}`) }</script>
+<template><div v-if="offering" class="page-shell"><PageHeader title="Edit course offering" :description="offering.course?.course_title" /><CourseOfferingForm :offering="offering" @saved="saved" /></div></template>

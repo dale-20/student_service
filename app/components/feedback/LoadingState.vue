@@ -1,0 +1,2 @@
+<script setup lang="ts">withDefaults(defineProps<{ rows?: number }>(), { rows: 4 })</script>
+<template><div class="surface overflow-hidden" aria-busy="true" aria-label="Loading content"><div v-for="row in rows" :key="row" class="flex animate-pulse gap-4 border-b border-slate-100 p-4 last:border-0"><div class="h-4 w-1/4 rounded bg-slate-200" /><div class="h-4 w-1/3 rounded bg-slate-100" /><div class="h-4 flex-1 rounded bg-slate-100" /></div></div></template>

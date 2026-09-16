@@ -1,0 +1,2 @@
+<script setup lang="ts">import { GraduationCap } from '@lucide/vue'</script>
+<template><NuxtLink to="/dashboard" class="flex items-center gap-3 rounded-lg"><span class="grid size-10 place-items-center rounded-lg bg-brand-600 text-white"><GraduationCap class="size-6" /></span><span><strong class="block text-base text-slate-900">StudentIS</strong><small class="text-xs text-slate-500">Academic portal</small></span></NuxtLink></template>

@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import { BookOpen, ClipboardCheck, GraduationCap, Library } from '@lucide/vue'; import type { Enrollment } from '~/types/domain'
+defineProps<{ registrar?: boolean }>(); interface Data { total_students: number; programs: number; course_offerings: number; active_enrollments: number; recent_enrollments: Enrollment[] }
+const { get } = useDashboard<Data>(); const { data } = await useAsyncData('management-dashboard', get)
+const stats = computed(() => [{ label: 'Total Students', value: data.value?.total_students ?? 0, detail: 'All profiles', icon: GraduationCap }, { label: 'Programs', value: data.value?.programs ?? 0, detail: 'Academic programs', icon: Library }, { label: 'Course Offerings', value: data.value?.course_offerings ?? 0, detail: 'All terms', icon: BookOpen }, { label: 'Active Enrollments', value: data.value?.active_enrollments ?? 0, detail: 'Currently enrolled', icon: ClipboardCheck }])
+</script>
+<template><div class="space-y-6"><div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><StatCard v-for="stat in stats" :key="stat.label" v-bind="stat" /></div><BaseCard><h2 class="mb-4 font-semibold">Recent enrollments</h2><div v-for="enrollment in data?.recent_enrollments" :key="enrollment.id" class="flex justify-between border-t border-slate-100 py-3"><span>{{ enrollment.student?.first_name }} {{ enrollment.student?.last_name }}</span><StatusBadge :status="enrollment.status" /></div></BaseCard></div></template>

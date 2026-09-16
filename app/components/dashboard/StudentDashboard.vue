@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import { BookOpen, Layers3 } from '@lucide/vue'; import type { Enrollment, Student } from '~/types/domain'
+interface Data { kind: string; student: Student; enrollments: Enrollment[]; current_units: number }
+const { user } = useAuth(); const { get } = useDashboard<Data>(); const { data } = await useAsyncData('student-dashboard', get)
+const stats = computed(() => [{ label: 'Enrolled Courses', value: data.value?.enrollments.length ?? 0, detail: 'Current load', icon: BookOpen }, { label: 'Current Units', value: data.value?.current_units ?? 0, detail: 'Current load', icon: Layers3 }])
+</script>
+<template><div class="space-y-6"><BaseCard class="bg-gradient-to-r from-brand-900 to-brand-700 text-white"><p class="text-sm text-green-100">Welcome back</p><h2 class="mt-1 text-2xl font-bold">Hello, {{ user?.name.split(' ')[0] }}</h2><p class="mt-4 text-sm">{{ data?.student.student_number }} · {{ data?.student.program?.code }} · Year {{ data?.student.year_level }}</p></BaseCard><div class="grid gap-4 sm:grid-cols-2"><StatCard v-for="stat in stats" :key="stat.label" v-bind="stat" /></div><BaseCard><h2 class="mb-4 font-semibold">Current courses</h2><div v-for="enrollment in data?.enrollments" :key="enrollment.id" class="border-t border-slate-100 py-4"><p class="font-semibold">{{ enrollment.course_offering?.course?.course_code }} · {{ enrollment.course_offering?.course?.course_title }}</p><p class="text-sm text-slate-500">{{ enrollment.course_offering?.section }}</p></div></BaseCard></div></template>

@@ -1,0 +1,2 @@
+<script setup lang="ts">definePageMeta({ middleware: 'auth' }); const route = useRoute(); const { forStudent } = useAcademicRecords(); const { data: record } = await useAsyncData(`academic-record-${route.params.id}`, () => forStudent(Number(route.params.id)))</script>
+<template><div v-if="record" class="page-shell"><PageHeader title="Academic record" :description="`${record.student.first_name} ${record.student.last_name} · ${record.student.student_number}`" /><AcademicRecordView :record="record" /></div></template>

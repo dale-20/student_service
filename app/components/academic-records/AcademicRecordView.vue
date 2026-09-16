@@ -1,0 +1,6 @@
+<script setup lang="ts">
+import type { AcademicRecord } from '~/composables/useAcademicRecords'; import { formatTerm } from '~/utils/formatters'
+defineProps<{ record: AcademicRecord }>()
+const columns = [{ key: 'code', label: 'Course code' }, { key: 'course', label: 'Course' }, { key: 'units', label: 'Units' }, { key: 'grade', label: 'Grade' }, { key: 'remarks', label: 'Remarks' }]
+</script>
+<template><div class="space-y-5"><BaseCard v-for="group in record.terms" :key="group.term.id"><div class="mb-5"><p class="text-xs font-bold uppercase text-brand-700">{{ group.term.academic_year }}</p><h2 class="text-lg font-semibold">{{ formatTerm(group.term.term) }}</h2></div><DataTable :columns="columns" :rows="group.enrollments.map(item => ({ id: item.id, code: item.course_offering?.course?.course_code, course: item.course_offering?.course?.course_title, units: item.course_offering?.course?.units, grade: item.grade?.final_grade ?? '—', remarks: item.grade?.remarks ?? 'In progress' }))" /><p class="mt-4 text-right text-sm font-semibold">Total units: {{ group.total_units }}</p></BaseCard><EmptyState v-if="!record.terms.length" title="No academic record" description="Completed and active coursework will appear here." /></div></template>
