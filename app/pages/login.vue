@@ -25,11 +25,11 @@ async function submit(): Promise<void> {
 </script>
 
 <template>
-  <BaseCard>
-    <div class="mb-7">
-      <span class="mb-4 grid size-11 place-items-center rounded-lg bg-brand-50 text-brand-700"><LockKeyhole class="size-5" /></span>
-      <h1 class="text-2xl font-bold text-slate-900">Welcome back</h1>
-      <p class="mt-1 text-sm text-slate-500">Sign in to your StudentIS workspace.</p>
+  <BaseCard class="p-6 sm:p-8">
+    <div class="mb-7 border-b border-[#d8e2ef] pb-6">
+      <LockKeyhole class="mb-4 size-5 text-brand-700" />
+      <h1 class="text-2xl font-semibold tracking-[-0.03em] text-[#102a43]">Welcome back</h1>
+      <p class="mt-1.5 text-sm text-[#60728a]">Sign in to your StudentIS workspace.</p>
     </div>
     <form class="space-y-4" @submit.prevent="submit">
       <FormField for="email" label="Email" required><BaseInput id="email" v-model="email" type="email" autocomplete="email" /></FormField>

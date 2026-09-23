@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-23T11:30:00+08:00",
+  "title": "Design System: StudentIS",
+  "extensions": {
+    "colorMeta": {
+      "academic-cobalt": { "role": "primary", "displayName": "Academic Cobalt", "canonical": "#0b63f3", "tonalRamp": ["#06285f", "#084099", "#0a58d6", "#0b63f3", "#4b8df7", "#8ab6fa", "#c7dcfd", "#eef5ff"] },
+      "registrar-ink": { "role": "neutral", "displayName": "Registrar Ink", "canonical": "#102a43", "tonalRamp": ["#071622", "#102a43", "#29445f", "#52677f", "#7c8ca0", "#aab6c4", "#d8e2ef", "#f4f7fb"] },
+      "porcelain-workspace": { "role": "neutral", "displayName": "Porcelain Workspace", "canonical": "#f4f7fb", "tonalRamp": ["#1b2633", "#354353", "#526174", "#748397", "#9eabb9", "#c6d0db", "#e3e9f0", "#f4f7fb"] }
+    },
+    "typographyMeta": {
+      "headline": { "displayName": "Page Headline", "purpose": "Primary page titles." },
+      "body": { "displayName": "Interface Body", "purpose": "Controls, records, and supporting copy." },
+      "label": { "displayName": "Compact Label", "purpose": "Navigation groups and metadata." }
+    },
+    "shadows": [
+      { "name": "ambient-surface", "value": "0 8px 28px -24px rgb(15 39 66 / 0.55)", "purpose": "Quiet separation for white surfaces." },
+      { "name": "overlay", "value": "0 18px 45px -24px rgb(15 39 66 / 0.55)", "purpose": "Temporary menus and notifications." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Entrances, exits, and press feedback." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.77, 0, 0.175, 1)", "purpose": "On-screen movement and list reflow." },
+      { "name": "ease-drawer", "value": "cubic-bezier(0.32, 0.72, 0, 1)", "purpose": "Mobile navigation drawer." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary actions and submission controls.",
+      "html": "<button class=\"ds-btn-primary\">Save changes</button>",
+      "css": ".ds-btn-primary{min-height:40px;padding:8px 16px;border:1px solid #0b63f3;border-radius:8px;background:#0b63f3;color:#fff;font:600 14px 'Source Sans 3',sans-serif;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}.ds-btn-primary:hover{background:#084dcc}.ds-btn-primary:focus-visible{outline:2px solid #0b63f3;outline-offset:2px}.ds-btn-primary:active{transform:scale(.97)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Standard form and filter field.",
+      "html": "<input class=\"ds-input\" placeholder=\"Student number\" />",
+      "css": ".ds-input{min-height:40px;padding:8px 12px;border:1px solid #cbd8e7;border-radius:8px;background:#fff;color:#20304a;font:400 14px 'Source Sans 3',sans-serif}.ds-input:hover{border-color:#9fb2c8}.ds-input:focus-visible{outline:2px solid #0b63f3;outline-offset:2px}"
+    },
+    {
+      "name": "Active Navigation Item",
+      "kind": "nav",
+      "description": "Current route marker in the registrar-ink rail.",
+      "html": "<a class=\"ds-nav-active\" href=\"#\">Dashboard</a>",
+      "css": ".ds-nav-active{display:flex;min-height:40px;align-items:center;padding:8px 12px;border-radius:8px;background:#0b63f3;color:#fff;text-decoration:none;font:500 14px 'Source Sans 3',sans-serif}.ds-nav-active:focus-visible{outline:2px solid #fff;outline-offset:2px}"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "description": "Semantic record state with compact geometry.",
+      "html": "<span class=\"ds-status\">Active</span>",
+      "css": ".ds-status{display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;background:#ecfdf5;color:#047857;box-shadow:inset 0 0 0 1px rgba(5,150,105,.2);font:600 12px 'Source Sans 3',sans-serif}"
+    },
+    {
+      "name": "Ruled Surface",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default container for forms and record groups.",
+      "html": "<section class=\"ds-surface\"><strong>Recent enrollments</strong></section>",
+      "css": ".ds-surface{padding:24px;border:1px solid #d8e2ef;border-radius:12px;background:#fff;color:#20304a;box-shadow:0 8px 28px -24px rgba(15,39,66,.55);font:400 14px 'Source Sans 3',sans-serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Registrar's Dossier",
+    "overview": "StudentIS translates the precision of an academic examination packet and registrar dossier into a modern operational interface. Ruled structure, compact labels, tabular rhythm, and an ink-like navigation rail make information feel ordered without turning the product into a paper imitation. The system is restrained, trustworthy, and dense enough for repeated administrative use.",
+    "keyCharacteristics": ["One dark navigation rail against a quiet light workspace.", "Cobalt appears only for action, selection, focus, and active state.", "Continuous ruled groups replace grids of floating statistic cards.", "One humanist sans family carries interface, labels, and data."],
+    "rules": [
+      { "name": "The Cobalt Mark Rule", "body": "Cobalt identifies what is actionable, selected, or focused. It is not decorative fill.", "section": "colors" },
+      { "name": "The One-Family Rule", "body": "Product hierarchy comes from scale and weight, never from mixing display and body families.", "section": "typography" },
+      { "name": "The Ruled Surface Rule", "body": "Prefer one hairline border to multiple layers of decorative elevation.", "section": "elevation" }
+    ],
+    "dos": ["Do reserve cobalt for action and state.", "Do group related metrics and records with shared rules.", "Do keep tables dense, legible, and horizontally scrollable on narrow screens.", "Do provide loading, empty, error, disabled, hover, focus, and success states."],
+    "donts": ["Don't use gradients, glass surfaces, or purple accents.", "Don't rebuild dense records as stacks of decorative cards.", "Don't animate data the user is reading; motion exists for feedback and spatial state.", "Don't mix corner systems or introduce a second icon language."]
+  }
+}
