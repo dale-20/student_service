@@ -3,8 +3,8 @@ defineProps<{ title: string; description?: string }>()
 </script>
 
 <template>
-  <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-    <div><h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-[28px]">{{ title }}</h1><p v-if="description" class="mt-1 text-sm text-slate-500 sm:text-base">{{ description }}</p></div>
+  <header class="flex flex-col gap-4 border-b border-[#d8e2ef] pb-5 sm:flex-row sm:items-start sm:justify-between">
+    <div><h1 class="text-[1.75rem] font-semibold tracking-[-0.035em] text-[#0f2742] sm:text-[2rem]">{{ title }}</h1><p v-if="description" class="mt-1.5 max-w-3xl text-sm leading-6 text-[#60728a]">{{ description }}</p></div>
     <div v-if="$slots.actions" class="flex flex-wrap gap-2"><slot name="actions" /></div>
   </header>
 </template>

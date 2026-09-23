@@ -27,14 +27,14 @@ Laravel remains the authorization, validation, business-rule, and persistence bo
 
 ## API authentication
 
-The Laravel origin defaults to `http://localhost:8000`, and the API base defaults to `http://localhost:8000/api/v1`. Keep the browser-facing Nuxt and Laravel hostnames consistent so the SPA can read the XSRF cookie:
+The Laravel origin defaults to `http://localhost:8000`, and the API base defaults to `http://localhost:8000/api/v1`:
 
 ```env
 NUXT_PUBLIC_BACKEND_ORIGIN=http://localhost:8000
 NUXT_PUBLIC_API_BASE=http://localhost:8000/api/v1
 ```
 
-The centralized API client uses Sanctum's first-party CSRF cookie and credentialed session requests. Authentication secrets are never stored in browser storage. Configure the same frontend origins and stateful domains in the Laravel environment.
+The centralized API client uses Sanctum's first-party CSRF cookie and credentialed session requests. During local development it aligns the `localhost` and `127.0.0.1` aliases with the hostname used to open Nuxt, because cookies set for one alias are not visible from the other. Authentication secrets are never stored in browser storage. Configure the same frontend origins and stateful domains in the Laravel environment.
 
 ## Quality gate
 
