@@ -1,0 +1,122 @@
+﻿import { expect, test, type Page } from '@playwright/test'
+
+async function visit(page: Page, path: string) {
+  await page.goto(path)
+  // Wait until Nuxt has attached form handlers before interacting with SSR markup.
+  await page.waitForFunction(() => (document.querySelector('#__nuxt') as HTMLElement & { __vue_app__?: { $nuxt?: { isHydrating: boolean } } })?.__vue_app__?.$nuxt?.isHydrating === false)
+}
+
+async function login(page: Page, email = 'admin@example.com') {
+  await visit(page, '/login')
+  await page.getByLabel(/email address/i).fill(email)
+  await page.getByLabel(/^Password/).fill('password')
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
+  await expect(page).toHaveURL(/\/dashboard$/)
+}
+
+test('creates, soft deletes and recovers a course through the browser', async ({ page }) => {
+  await login(page)
+  await visit(page, '/courses/create')
+  await page.getByLabel('Course code').fill('E2E101')
+  await page.getByLabel('Course title').fill('Recovery workflow course')
+  await page.getByLabel('Units').fill('3')
+  await page.getByLabel('Description', { exact: true }).fill('Created by the isolated browser test.')
+  await page.getByLabel(/^Status/).selectOption('active')
+  await page.getByRole('button', { name: 'Create course', exact: true }).click()
+  await expect(page).toHaveURL(/\/courses$/)
+  await page.getByRole('searchbox').fill('E2E101')
+  const row = page.getByRole('row').filter({ hasText: 'E2E101' })
+  await expect(row).toBeVisible()
+  await row.getByRole('button', { name: /^Delete / }).click()
+  await row.getByRole('button', { name: 'Confirm delete' }).click()
+  await expect(row).toHaveCount(0)
+  await visit(page, '/recycle-bin?type=courses')
+  const deleted = page.getByRole('row').filter({ hasText: 'E2E101' })
+  await expect(deleted).toBeVisible()
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.screenshot({ path: '.impeccable/review/desktop.png', fullPage: true, animations: 'disabled' })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.screenshot({ path: '.impeccable/review/mobile.png', fullPage: true, animations: 'disabled' })
+  await deleted.getByRole('button', { name: /^Recover / }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'was recovered' })).toBeVisible()
+  await expect(deleted).toHaveCount(0)
+  await visit(page, '/courses?search=E2E101')
+  await expect(page.getByRole('row').filter({ hasText: 'Recovery workflow course' })).toBeVisible()
+})
+
+test('preserves an existing optional curriculum entry when saved', async ({ page }) => {
+  await login(page)
+  await visit(page, '/programs')
+  await page.getByRole('link', { name: 'View', exact: true }).first().click()
+  const course = page.locator('#curriculum-course-0')
+  await expect(course).not.toHaveValue('')
+  const semester = page.locator('#curriculum-semester-0')
+  await semester.selectOption('first')
+  await page.getByLabel('Required', { exact: true }).first().uncheck()
+  await page.getByRole('button', { name: 'Save curriculum' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Curriculum saved' })).toBeVisible()
+  await page.reload()
+  await expect(course).not.toHaveValue('')
+  await expect(semester).toHaveValue('first')
+  await expect(page.getByLabel('Required', { exact: true }).first()).not.toBeChecked()
+})
+
+test('keeps recovery unavailable to students and displays their actual profile', async ({ page }) => {
+  await login(page, 'student@example.com')
+  await visit(page, '/my-profile')
+  await expect(page.getByRole('heading', { name: 'Academic profile' })).toBeVisible()
+  await visit(page, '/recycle-bin')
+  await expect(page).toHaveURL(/\/forbidden$/)
+})
+
+test('saves eligible grades with withdrawn students in the roster', async ({ page }) => {
+  await login(page)
+  await visit(page, '/grades')
+  const offering = page.locator('#grade-offering')
+  await expect(offering.locator('option')).not.toHaveCount(1)
+  await offering.selectOption({ index: 1 })
+  const editable = page.locator('input[id^="midterm-"]:enabled').first()
+  await expect(editable).toBeVisible()
+  await editable.fill('1.75')
+  await page.getByRole('button', { name: 'Save grades', exact: true }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Grades saved successfully' })).toBeVisible()
+  await editable.fill('')
+  await page.getByRole('button', { name: 'Save grades', exact: true }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Grades saved successfully' })).toBeVisible()
+  await expect(page.getByRole('button', { name: /delete/i })).toHaveCount(0)
+})
+
+test('persists local interface preferences across reloads', async ({ page }) => {
+  await login(page)
+  await visit(page, '/settings')
+  await page.getByLabel(/Compact tables/).check()
+  await page.getByRole('button', { name: 'Save preferences' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Preferences saved' })).toBeVisible()
+  await page.reload()
+  await expect(page.getByLabel(/Compact tables/)).toBeChecked()
+})
+
+test('shows one student’s enrollments, grades and academic record without navigation', async ({ page }) => {
+  await login(page)
+  await visit(page, '/students')
+  await page.getByRole('link', { name: 'View', exact: true }).first().click()
+  await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
+  const studentUrl = page.url()
+
+  await page.getByRole('tab', { name: 'Enrollments' }).click()
+  const enrollments = page.getByRole('tabpanel', { name: 'Enrollments' })
+  await expect(enrollments.getByRole('row').first()).toBeVisible()
+  await expect(page).toHaveURL(studentUrl)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.screenshot({ path: '.impeccable/review/student-desktop.png', fullPage: true, animations: 'disabled' })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.screenshot({ path: '.impeccable/review/student-mobile.png', fullPage: true, animations: 'disabled' })
+
+  await page.getByRole('tab', { name: 'Grades' }).click()
+  await expect(page.getByRole('tabpanel', { name: 'Grades' }).getByRole('row').first()).toBeVisible()
+  await expect(page).toHaveURL(studentUrl)
+  await page.getByRole('tab', { name: 'Academic record' }).click()
+  await expect(page.getByRole('tabpanel', { name: 'Academic record' }).getByText('Academic year').first()).toBeVisible()
+  await expect(page).toHaveURL(studentUrl)
+})
+

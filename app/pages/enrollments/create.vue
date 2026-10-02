@@ -1,7 +1,51 @@
-<script setup lang="ts">
-import { Check } from '@lucide/vue'; import type { ApiProblem } from '~/types/api'
-definePageMeta({ middleware: 'auth' }); const { list: listStudents } = useStudents(); const { list: listOfferings } = useCourseOfferings(); const { create } = useEnrollments(); const [{ data: studentsResult }, { data: offeringsResult }] = await Promise.all([useAsyncData('enrollment-students', () => listStudents({ status: 'active', per_page: 100 })), useAsyncData('enrollment-offerings', () => listOfferings({ status: 'open', per_page: 100 }))]); const students = computed(() => studentsResult.value?.data ?? []); const offerings = computed(() => offeringsResult.value?.data ?? []); const studentId = ref<number | ''>(''); const offeringIds = ref<number[]>([]); const submitting = ref(false); const errorMessage = ref('')
-function toggle(id: number) { offeringIds.value = offeringIds.value.includes(id) ? offeringIds.value.filter(value => value !== id) : [...offeringIds.value, id] }
-async function submit() { submitting.value = true; errorMessage.value = ''; try { await create(Number(studentId.value), offeringIds.value); await navigateTo('/enrollments') } catch (error) { const problem = error as ApiProblem; errorMessage.value = problem.status === 409 ? problem.message : 'Enrollment could not be completed.' } finally { submitting.value = false } }
+﻿<script setup lang="ts">
+import type { ApiProblem } from '~/types/api'
+import type { RecordOption } from '~/types/selection'
+
+definePageMeta({ middleware: 'auth' })
+const { studentOptions, offeringOptions } = useRecordOptions()
+const students = studentOptions({ status: 'active' })
+const offerings = offeringOptions({ status: 'open' })
+const { create } = useEnrollments()
+const studentId = ref<number | ''>('')
+const offeringId = ref<number | ''>('')
+const selectedOffering = ref<RecordOption>()
+const selection = ref<RecordOption[]>([])
+const submitting = ref(false)
+const errors = ref<Record<string, string[]>>({})
+function addOffering() {
+  if (selectedOffering.value && !selection.value.some(item => item.id === selectedOffering.value?.id)) selection.value.push(selectedOffering.value)
+  offeringId.value = ''
+}
+async function submit() {
+  if (submitting.value || !studentId.value || !selection.value.length) return
+  submitting.value = true
+  errors.value = {}
+  try {
+    await create(studentId.value, selection.value.map(item => item.id))
+    await navigateTo('/enrollments')
+  }
+  catch (failure) {
+    const problem = failure as ApiProblem
+    errors.value = problem.errors ?? { form: [problem.message] }
+  }
+  finally { submitting.value = false }
+}
 </script>
-<template><div class="page-shell"><PageHeader title="Enroll student" description="The complete selection is committed atomically." /><BaseCard><FormField for="student" label="Student" required><BaseSelect id="student" v-model="studentId" :options="students.map(item => ({ label: `${item.student_number} · ${item.last_name}, ${item.first_name}`, value: item.id }))" /></FormField></BaseCard><BaseCard><h2 class="mb-4 font-semibold text-[#102a43]">Open course offerings</h2><div class="divide-y divide-[#e5ecf3] border-y border-[#d8e2ef]"><button v-for="offering in offerings" :key="offering.id" type="button" class="pressable flex w-full gap-3 px-1 py-4 text-left" :class="offeringIds.includes(offering.id) ? 'text-brand-700' : 'text-[#29445f]'" @click="toggle(offering.id)"><span class="grid size-5 place-items-center rounded border" :class="offeringIds.includes(offering.id) ? 'border-brand-600 bg-brand-600 text-white' : 'border-[#9fb2c8]' "><Check v-if="offeringIds.includes(offering.id)" class="size-3" /></span><span><strong class="block">{{ offering.course?.course_code }} · {{ offering.section }}</strong><small class="text-[#60728a]">{{ offering.enrolled_count ?? 0 }} / {{ offering.capacity }} enrolled</small></span></button></div></BaseCard><p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p><div class="flex justify-end"><BaseButton :disabled="!studentId || !offeringIds.length" :loading="submitting" @click="submit">Confirm enrollment</BaseButton></div></div></template>
+
+<template>
+  <div class="page-shell">
+    <PageHeader title="Enroll student" description="Choose a student and one or more open course offerings." />
+    <form class="space-y-6" @submit.prevent="submit">
+      <BaseCard><RecordPicker id="enrollment-student" v-model="studentId" label="Student" :load="students" :disabled="submitting" :error="errors.student_id?.[0]" /></BaseCard>
+      <BaseCard>
+        <RecordPicker id="enrollment-offering" v-model="offeringId" label="Course offering" :load="offerings" :disabled="submitting" @select="option => selectedOffering = option" />
+        <BaseButton class="mt-4" variant="secondary" :disabled="!offeringId || submitting" @click="addOffering">Add offering</BaseButton>
+        <ul v-if="selection.length" class="mt-5 divide-y divide-rule border-y border-rule"><li v-for="item in selection" :key="item.id" class="flex items-center justify-between gap-3 py-3"><span class="text-sm">{{ item.label }}</span><BaseButton variant="ghost" :disabled="submitting" :aria-label="`Remove ${item.label}`" @click="selection = selection.filter(row => row.id !== item.id)">Remove</BaseButton></li></ul>
+        <p v-else class="mt-4 text-sm text-muted">No offerings selected yet.</p>
+      </BaseCard>
+      <div v-if="Object.keys(errors).length" role="alert" class="text-sm text-red-700"><p v-for="(messages, key) in errors" :key="key">{{ messages[0] }}</p></div>
+      <div class="flex justify-end gap-3"><BaseButton to="/enrollments" variant="secondary">Cancel</BaseButton><BaseButton type="submit" :disabled="!studentId || !selection.length" :loading="submitting">Confirm enrollment</BaseButton></div>
+    </form>
+  </div>
+</template>

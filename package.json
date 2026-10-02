@@ -1,5 +1,5 @@
 {
-  "name": "student_service",
+  "name": "studentserve",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@11.18.0",
@@ -13,6 +13,7 @@
     "postinstall": "nuxt prepare",
     "quality": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "test:watch": "vitest",
     "typecheck": "nuxt typecheck"
   },
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/test-utils": "^4.3.2",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vue/test-utils": "^2.5.0",
     "eslint": "^10.10.0",

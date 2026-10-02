@@ -1,4 +1,4 @@
-import { BookOpen, BookUser, CalendarDays, ClipboardList, FileText, GraduationCap, LayoutDashboard, Library, Settings, ShieldCheck, UserRound, Users } from '@lucide/vue'
+import { ArchiveRestore, BookOpen, BookUser, CalendarDays, ClipboardList, FileText, GraduationCap, LayoutDashboard, Library, Settings, ShieldCheck, UserRound, Users } from '@lucide/vue'
 import type { NavigationGroup } from '~/types/navigation'
 
 const allRoles = ['administrator', 'registrar', 'instructor', 'student'] as const
@@ -23,6 +23,7 @@ export const navigationGroups: NavigationGroup[] = [
   ] },
   { label: 'Administration', items: [
     { label: 'Users', to: '/users', icon: Users, roles: ['administrator'] },
+    { label: 'Deleted records', to: '/recycle-bin', icon: ArchiveRestore, roles: ['administrator', 'registrar'] },
     { label: 'Settings', to: '/settings', icon: Settings, roles: ['administrator'] },
   ] },
   { label: 'Account', items: [{ label: 'Profile', to: '/profile', icon: ShieldCheck, roles: ['administrator', 'registrar', 'instructor'] }] },

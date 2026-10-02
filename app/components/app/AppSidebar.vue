@@ -11,7 +11,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
 <template>
   <div v-if="open" class="fixed inset-0 z-40 bg-[#071b2f]/55 lg:hidden" aria-hidden="true" @click="emit('close')" />
   <aside class="fixed inset-y-0 left-0 z-50 flex w-[17rem] flex-col border-r border-white/10 bg-[#102a43] text-white transition-transform duration-300 [transition-timing-function:var(--ease-drawer)] lg:translate-x-0" :class="open ? 'translate-x-0' : '-translate-x-full'">
-    <div class="flex h-20 items-center justify-between px-5 [&_small]:text-blue-200 [&_strong]:text-white"><AppLogo /><button class="pressable rounded-lg p-2 text-blue-100 hover:bg-white/10 lg:hidden" aria-label="Close navigation" @click="emit('close')"><X class="size-5" /></button></div>
+    <div class="flex h-20 items-center justify-between px-5"><AppLogo inverse /><button class="pressable rounded-lg p-2 text-blue-100 hover:bg-white/10 lg:hidden" aria-label="Close navigation" @click="emit('close')"><X class="size-5" /></button></div>
     <nav class="flex-1 space-y-6 overflow-y-auto px-3 py-4" aria-label="Primary navigation">
       <section v-for="(group, index) in groups" :key="group.label ?? index">
         <p v-if="group.label" class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-200/70">{{ group.label }}</p>

@@ -1,2 +1,22 @@
-<script setup lang="ts">definePageMeta({ middleware: 'auth' }); const { show } = useToasts(); const notifications = ref(true); const compactTables = ref(false)</script>
-<template><div class="page-shell"><PageHeader title="Settings" description="Configure local interface preferences." /><BaseCard><h2 class="font-semibold text-[#102a43]">Interface preferences</h2><p class="mb-6 mt-1 text-sm text-[#60728a]">Server-managed institutional settings will appear when backend endpoints are available.</p><div class="divide-y divide-[#e5ecf3] border-y border-[#d8e2ef]"><label class="flex items-center justify-between gap-5 py-4"><span><strong class="block text-sm text-[#29445f]">Notifications</strong><small class="text-[#60728a]">Show relevant academic alerts.</small></span><input v-model="notifications" type="checkbox" class="size-5 accent-brand-600" ></label><label class="flex items-center justify-between gap-5 py-4"><span><strong class="block text-sm text-[#29445f]">Compact tables</strong><small class="text-[#60728a]">Reduce row spacing on data-heavy pages.</small></span><input v-model="compactTables" type="checkbox" class="size-5 accent-brand-600" ></label></div><div class="mt-6 flex justify-end"><BaseButton @click="show('Preferences saved.')">Save preferences</BaseButton></div></BaseCard></div></template>
+﻿<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+const { preferences } = usePreferences()
+const form = reactive({ ...preferences.value })
+const saved = ref(false)
+function save() { preferences.value = { ...form }; saved.value = true }
+watch(form, () => { saved.value = false })
+</script>
+<template>
+  <div class="page-shell">
+    <PageHeader title="Settings" description="Interface preferences saved in this browser." />
+    <BaseCard><form class="space-y-5" @submit.prevent="save">
+      <h2 class="font-semibold">Interface preferences</h2>
+      <div class="divide-y divide-rule border-y border-rule">
+        <label class="flex items-center justify-between gap-5 py-4"><span><strong class="block text-sm">Success notifications</strong><small class="text-muted">Show confirmation messages after actions. Errors always remain visible.</small></span><input v-model="form.notifications" type="checkbox" class="size-5 accent-brand-600"></label>
+        <label class="flex items-center justify-between gap-5 py-4"><span><strong class="block text-sm">Compact tables</strong><small class="text-muted">Use shorter rows when reviewing records.</small></span><input v-model="form.compactTables" type="checkbox" class="size-5 accent-brand-600"></label>
+      </div>
+      <p v-if="saved" role="status" class="text-sm text-green-800">Preferences saved.</p>
+      <div class="flex justify-end"><BaseButton type="submit">Save preferences</BaseButton></div>
+    </form></BaseCard>
+  </div>
+</template>

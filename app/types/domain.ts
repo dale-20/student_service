@@ -5,8 +5,10 @@ export type OfferingStatus = 'open' | 'closed' | 'ongoing' | 'completed' | 'canc
 
 export interface Role { id: number; name: string; slug: RoleSlug }
 export interface User { id: number; name: string; email: string; role: Role; status: EntityStatus; last_login_at?: string | null; must_change_password?: boolean; student?: Student | null }
-export interface ProgramCourse { id: number; program_id: number; course_id: number; year_level: number; semester: string; course?: Course }
-export interface Program { id: number; code: string; name: string; description?: string | null; status: 'active' | 'inactive'; students_count?: number; courses_count?: number; program_courses?: ProgramCourse[] }
+export type Semester = 'first' | 'second' | 'summer'
+export interface ProgramCourse { id: number; program_id: number; course_id: number; year_level: number | null; semester: Semester | null; is_required: boolean; course?: Course }
+export type CurriculumInput = Pick<ProgramCourse, 'course_id' | 'year_level' | 'semester' | 'is_required'>
+export interface Program { id: number; code: string; name: string; description?: string | null; status: 'active' | 'inactive'; students_count?: number; courses_count?: number; curriculum?: ProgramCourse[] }
 export interface Student { id: number; user_id?: number | null; program_id: number; student_number: string; first_name: string; middle_name?: string | null; last_name: string; suffix?: string | null; birth_date?: string | null; email?: string | null; contact_number?: string | null; address?: string | null; year_level: number; status: EntityStatus; program?: Program; user?: User | null }
 export interface Course { id: number; course_code: string; course_title: string; description?: string | null; units: number; status: 'active' | 'inactive' }
 export interface AcademicTerm { id: number; academic_year: string; term: 'first_semester' | 'second_semester' | 'summer'; start_date: string; end_date: string; status: 'upcoming' | 'active' | 'completed' }

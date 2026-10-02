@@ -1,2 +1,14 @@
-<script setup lang="ts">definePageMeta({ middleware: 'auth' }); const { list } = useCourseOfferings(); const { data: result } = await useAsyncData('grade-offerings', () => list({ per_page: 100 })); const selectedId = ref<number | ''>(result.value?.data[0]?.id ?? '')</script>
-<template><div class="page-shell"><PageHeader title="Grade management" description="Select an offering and update eligible enrollment grades." /><BaseCard><FormField for="grade-offering" label="Course offering"><BaseSelect id="grade-offering" v-model="selectedId" :options="(result?.data ?? []).map(item => ({ label: `${item.course?.course_code} · ${item.section}`, value: item.id }))" /></FormField></BaseCard><GradeEditor v-if="selectedId" :key="selectedId" :offering-id="Number(selectedId)" /></div></template>
+﻿<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+const { offeringOptions } = useRecordOptions()
+const load = offeringOptions()
+const selectedId = ref<number | ''>('')
+</script>
+<template>
+  <div class="page-shell">
+    <PageHeader title="Grade management" description="Select an offering to review and update grades." />
+    <BaseCard><RecordPicker id="grade-offering" v-model="selectedId" label="Course offering" :load="load" /></BaseCard>
+    <GradeEditor v-if="selectedId" :key="selectedId" :offering-id="selectedId" />
+    <EmptyState v-else title="Select a course offering" description="Search or browse offerings to open the grade roster." />
+  </div>
+</template>

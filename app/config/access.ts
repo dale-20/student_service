@@ -11,6 +11,7 @@ export const routeAccess: Record<string, RoleSlug[]> = {
   '/academic-record': ['registrar', 'student'],
   '/users': ['administrator'],
   '/settings': ['administrator'],
+  '/recycle-bin': ['administrator', 'registrar'],
   '/my-course-offerings': ['instructor'],
   '/my-profile': ['student'],
   '/my-enrollments': ['student'],

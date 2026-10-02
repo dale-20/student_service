@@ -8,7 +8,7 @@ web
 
 ## Users
 
-StudentIS serves four role-based audiences with equal design priority:
+StudentServe serves four role-based audiences with equal design priority:
 
 - Administrators manage users, system access, and institutional settings.
 - Registrars manage students, programs, courses, terms, offerings, enrollments, grades, and academic records.
@@ -17,7 +17,7 @@ StudentIS serves four role-based audiences with equal design priority:
 
 ## Product Purpose
 
-StudentIS is a shared academic operations workspace. It keeps student information, course delivery, enrollment, and academic records connected through role-appropriate workflows while Laravel remains the authority for data and business rules.
+StudentServe is a shared academic operations workspace. It keeps student information, course delivery, enrollment, and academic records connected through role-appropriate workflows while Laravel remains the authority for data and business rules.
 
 Success means each role can understand its current academic or administrative state, find its next task quickly, and complete routine work without ambiguity.
 
@@ -39,7 +39,8 @@ The product is used repeatedly for focused operational work: scanning dashboards
 
 ## Brand Commitments
 
-- Preserve the StudentIS name and existing logo concept.
+- Use the StudentServe name and its original university-style shield, open book, and star crest.
+- Pair the navy-and-gold crest with a traditional serif wordmark; do not imply affiliation with a real university or invent founding dates or accreditation.
 - The interface voice is concise, direct, and institutional without feeling bureaucratic.
 
 ## Evidence on Hand

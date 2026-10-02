@@ -1,5 +1,7 @@
 import type { ApiQuery, ApiResponse, PaginatedResponse } from '~/types/api'
-import type { Enrollment } from '~/types/domain'
+import type { Enrollment, EnrollmentStatus } from '~/types/domain'
+
+export interface EnrollmentPayload { student_id: number; course_offering_id: number; enrollment_date: string; status: EnrollmentStatus }
 
 export function useEnrollments() {
   const { request } = useApi()
@@ -7,6 +9,7 @@ export function useEnrollments() {
   const find = async (id: number) => (await request<ApiResponse<Enrollment>>(`/enrollments/${id}`)).data
   const create = async (studentId: number, courseOfferingIds: number[]) => (await request<{ data: Enrollment[] }>('/enrollments', { method: 'POST', body: { student_id: studentId, course_offering_ids: courseOfferingIds } })).data
   const updateStatus = async (id: number, status: string) => (await request<ApiResponse<Enrollment>>(`/enrollments/${id}/status`, { method: 'PATCH', body: { status } })).data
+  const update = async (id: number, payload: EnrollmentPayload) => (await request<ApiResponse<Enrollment>>(`/enrollments/${id}`, { method: 'PUT', body: payload })).data
 
-  return { list, find, create, updateStatus }
+  return { list, find, create, update, updateStatus }
 }

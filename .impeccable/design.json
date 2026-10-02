@@ -1,14 +1,18 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-09-23T11:30:00+08:00",
-  "title": "Design System: StudentIS",
+  "title": "Design System: StudentServe",
   "extensions": {
     "colorMeta": {
+      "crest-gold": { "role": "brand", "displayName": "Crest Gold", "canonical": "#c5a468", "tonalRamp": ["#c5a468"] },
+      "crest-paper": { "role": "brand", "displayName": "Crest Paper", "canonical": "#fcfaf4", "tonalRamp": ["#fcfaf4"] },
       "academic-cobalt": { "role": "primary", "displayName": "Academic Cobalt", "canonical": "#0b63f3", "tonalRamp": ["#06285f", "#084099", "#0a58d6", "#0b63f3", "#4b8df7", "#8ab6fa", "#c7dcfd", "#eef5ff"] },
       "registrar-ink": { "role": "neutral", "displayName": "Registrar Ink", "canonical": "#102a43", "tonalRamp": ["#071622", "#102a43", "#29445f", "#52677f", "#7c8ca0", "#aab6c4", "#d8e2ef", "#f4f7fb"] },
       "porcelain-workspace": { "role": "neutral", "displayName": "Porcelain Workspace", "canonical": "#f4f7fb", "tonalRamp": ["#1b2633", "#354353", "#526174", "#748397", "#9eabb9", "#c6d0db", "#e3e9f0", "#f4f7fb"] }
     },
     "typographyMeta": {
+      "wordmark": { "displayName": "StudentServe Wordmark", "purpose": "Georgia bold, 29px desktop, 26px mobile; exclusive to the logo." },
+      "wordmark-compact": { "displayName": "Compact Wordmark", "purpose": "Georgia bold at 21px for navigation and auth layouts." },
       "headline": { "displayName": "Page Headline", "purpose": "Primary page titles." },
       "body": { "displayName": "Interface Body", "purpose": "Controls, records, and supporting copy." },
       "label": { "displayName": "Compact Label", "purpose": "Navigation groups and metadata." }
@@ -69,11 +73,11 @@
   ],
   "narrative": {
     "northStar": "The Registrar's Dossier",
-    "overview": "StudentIS translates the precision of an academic examination packet and registrar dossier into a modern operational interface. Ruled structure, compact labels, tabular rhythm, and an ink-like navigation rail make information feel ordered without turning the product into a paper imitation. The system is restrained, trustworthy, and dense enough for repeated administrative use.",
+    "overview": "StudentServe translates the precision of an academic examination packet and registrar dossier into a modern operational interface. Ruled structure, compact labels, tabular rhythm, and an ink-like navigation rail make information feel ordered without turning the product into a paper imitation. The system is restrained, trustworthy, and dense enough for repeated administrative use.",
     "keyCharacteristics": ["One dark navigation rail against a quiet light workspace.", "Cobalt appears only for action, selection, focus, and active state.", "Continuous ruled groups replace grids of floating statistic cards.", "One humanist sans family carries interface, labels, and data."],
     "rules": [
       { "name": "The Cobalt Mark Rule", "body": "Cobalt identifies what is actionable, selected, or focused. It is not decorative fill.", "section": "colors" },
-      { "name": "The One-Family Rule", "body": "Product hierarchy comes from scale and weight, never from mixing display and body families.", "section": "typography" },
+      { "name": "The One-Family Rule", "body": "Product hierarchy uses Source Sans 3. The StudentServe wordmark is the sole exception: Georgia bold, with Times New Roman and serif fallbacks, evokes formal academic lettering without changing interface typography.", "section": "typography" },
       { "name": "The Ruled Surface Rule", "body": "Prefer one hairline border to multiple layers of decorative elevation.", "section": "elevation" }
     ],
     "dos": ["Do reserve cobalt for action and state.", "Do group related metrics and records with shared rules.", "Do keep tables dense, legible, and horizontally scrollable on narrow screens.", "Do provide loading, empty, error, disabled, hover, focus, and success states."],

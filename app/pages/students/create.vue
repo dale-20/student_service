@@ -1,2 +1,2 @@
-<script setup lang="ts">definePageMeta({ middleware: 'auth' }); useSeoMeta({ title: 'Add student · StudentIS' }); const { show } = useToasts(); async function saved(): Promise<void> { show('Student created successfully.'); await navigateTo('/students') }</script>
+<script setup lang="ts">definePageMeta({ middleware: 'auth' }); useSeoMeta({ title: 'Add student · StudentServe' }); const { show } = useToasts(); async function saved(): Promise<void> { show('Student created successfully.'); await navigateTo('/students') }</script>
 <template><div class="page-shell"><PageHeader title="Add student" description="Create a new academic student profile." /><StudentForm @saved="saved" /></div></template>

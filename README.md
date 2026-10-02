@@ -1,6 +1,6 @@
-# Student Service Frontend
+# StudentServe Frontend
 
-The Nuxt 4 frontend for the Student Service application. Laravel is maintained separately in `../student_service-api` and is the source of truth for data, validation, authentication, authorization, and business rules.
+The Nuxt 4 frontend for the StudentServe application. Laravel is maintained separately in `../student_service-api` and is the source of truth for data, validation, authentication, authorization, and business rules.
 
 ## Local development
 
@@ -45,3 +45,17 @@ pnpm run quality
 This runs ESLint, strict TypeScript checking, Vitest, and a production Nuxt build. All four checks must pass before a change is complete.
 
 Development conventions and the definition of done are documented in [CONTRIBUTING.md](CONTRIBUTING.md). Rules for coding agents are in [AGENTS.md](AGENTS.md).
+
+## Deletion and recovery
+
+Administrators and registrars can move records to **Deleted records** from list pages and recover them at `/recycle-bin`. User accounts remain administrator-only. Linked records may need to be reassigned or recovered first; the API reports the dependency. There is no permanent-delete action.
+
+Grades cannot be deleted, and enrollments with grades cannot be deleted or reassigned to a different student or offering. Status and enrollment-date corrections remain available. Removed curriculum entries and meeting schedules can also be recovered.
+
+## Browser regression tests
+
+```powershell
+pnpm run test:e2e
+```
+
+Requires PHP on PATH, installed API dependencies in `../student_service-api`, and Google Chrome. The runner starts Nuxt on port 3100 and Laravel on port 8100. Each run creates a new SQLite database under the ignored `.data/` directory, migrates and seeds that database, and never uses the application's configured database. Both ports must be free. The tests cover create/delete/recovery, curriculum persistence, grade saving, student access restrictions, and saved interface preferences. Screenshots of the recovery page are written to `.impeccable/review/`.

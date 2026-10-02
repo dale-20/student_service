@@ -1,5 +1,5 @@
 ---
-name: StudentIS
+name: StudentServe
 description: A precise academic operations interface built around connected records.
 colors:
   academic-cobalt: "#0b63f3"
@@ -11,7 +11,25 @@ colors:
   field-line: "#cbd8e7"
   body-ink: "#20304a"
   secondary-ink: "#60728a"
+  crest-gold: "#c5a468"
+  crest-paper: "#fcfaf4"
 typography:
+  wordmark:
+    fontFamily: "Georgia, 'Times New Roman', serif"
+    fontSize: "29px"
+    fontWeight: 700
+    lineHeight: 1.1
+    letterSpacing: "-0.035em"
+  wordmark-mobile:
+    fontFamily: "Georgia, 'Times New Roman', serif"
+    fontSize: "26px"
+    fontWeight: 700
+    lineHeight: 1.1
+  wordmark-compact:
+    fontFamily: "Georgia, 'Times New Roman', serif"
+    fontSize: "21px"
+    fontWeight: 700
+    lineHeight: 1.1
   headline:
     fontFamily: "Source Sans 3, ui-sans-serif, system-ui, sans-serif"
     fontSize: "2rem"
@@ -62,13 +80,13 @@ components:
     height: "40px"
 ---
 
-# Design System: StudentIS
+# Design System: StudentServe
 
 ## Overview
 
 **Creative North Star: "The Registrar's Dossier"**
 
-StudentIS translates the precision of an academic examination packet and registrar dossier into a modern operational interface. Ruled structure, compact labels, tabular rhythm, and an ink-like navigation rail make information feel ordered without turning the product into a paper imitation.
+StudentServe translates the precision of an academic examination packet and registrar dossier into a modern operational interface. Ruled structure, compact labels, tabular rhythm, and an ink-like navigation rail make information feel ordered without turning the product into a paper imitation.
 
 The system is restrained, trustworthy, and dense enough for repeated administrative use. Familiar controls stay familiar. Visual character comes from the relationship between deep registrar ink, porcelain workspace surfaces, cobalt marks, and disciplined rules.
 
@@ -113,7 +131,11 @@ The palette behaves like ink on cool institutional paper, with a single saturate
 - **Body** (400, 0.875rem, 1.5): Interface copy and table content.
 - **Label** (600, 0.75rem, 1.4): Navigation groups, metadata, and compact controls.
 
-**The One-Family Rule.** Product hierarchy comes from scale and weight, never from mixing display and body families.
+**The One-Family Rule.** Product hierarchy uses Source Sans 3. The StudentServe wordmark is the sole exception: Georgia bold, with Times New Roman and serif fallbacks, evokes formal academic lettering without changing interface typography.
+
+### StudentServe identity
+
+`AppBrand` pairs the original navy shield, gold border and star, and ivory open book in `public/brand/studentserve-crest.svg` with the StudentServe wordmark. Use the full lockup in the school-portal layout, including sign-in, and the compact variant in navigation and the auth layout. `AppLogo` adds the dashboard link. The crest is decorative when the visible name accompanies it; the same SVG supplies the browser icon. Use the inverse variant on the dark navigation rail and auth panel: white wordmark and ruled-line subtitle. Gold is reserved for the crest, while cobalt continues to identify actions and state.
 
 ## Layout
 

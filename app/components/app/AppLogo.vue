@@ -1,2 +1,9 @@
-<script setup lang="ts">import { BookOpen } from '@lucide/vue'</script>
-<template><NuxtLink to="/dashboard" class="pressable flex items-center gap-3 rounded-lg"><span class="grid size-9 place-items-center rounded-lg border border-white/15 bg-brand-600 text-white shadow-[0_7px_18px_-12px_rgba(11,99,243,0.9)]"><BookOpen class="size-5" :stroke-width="2" /></span><span><strong class="block text-[17px] font-semibold tracking-[-0.02em] text-[#102a43]">StudentIS</strong><small class="block text-[11px] font-medium text-[#60728a]">Academic records</small></span></NuxtLink></template>
+<script setup lang="ts">
+withDefaults(defineProps<{ inverse?: boolean }>(), { inverse: false })
+</script>
+
+<template>
+  <NuxtLink to="/dashboard" aria-label="StudentServe dashboard" class="pressable rounded-lg">
+    <AppBrand compact :inverse="inverse" />
+  </NuxtLink>
+</template>
