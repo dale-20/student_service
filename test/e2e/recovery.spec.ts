@@ -47,7 +47,7 @@ test('creates, soft deletes and recovers a course through the browser', async ({
 test('preserves an existing optional curriculum entry when saved', async ({ page }) => {
   await login(page)
   await visit(page, '/programs')
-  await page.getByRole('link', { name: 'View', exact: true }).first().click()
+  await page.getByRole('link', { name: /^View / }).first().click()
   const course = page.locator('#curriculum-course-0')
   await expect(course).not.toHaveValue('')
   const semester = page.locator('#curriculum-semester-0')
@@ -99,7 +99,7 @@ test('persists local interface preferences across reloads', async ({ page }) => 
 test('shows one student’s enrollments, grades and academic record without navigation', async ({ page }) => {
   await login(page)
   await visit(page, '/students')
-  await page.getByRole('link', { name: 'View', exact: true }).first().click()
+  await page.getByRole('link', { name: /^View / }).first().click()
   await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
   const studentUrl = page.url()
 

@@ -35,6 +35,8 @@ describe('soft delete confirmation', () => {
     let finish: (() => void) | undefined
     mocks.remove.mockImplementation(() => new Promise<void>((resolve) => { finish = resolve }))
     const wrapper = await mountSuspended(DeleteRecordButton, { props: { type: 'courses', recordId: 4, label: 'IT101' } })
+    expect(wrapper.get('button[aria-label="Delete IT101"]').attributes('title')).toBe('Delete IT101')
+    expect(wrapper.find('button[aria-label="Delete IT101"] svg').exists()).toBe(true)
     await wrapper.get('button').trigger('click')
     expect(mocks.remove).not.toHaveBeenCalled()
     const confirm = wrapper.findAll('button').find(button => button.text() === 'Confirm delete')!

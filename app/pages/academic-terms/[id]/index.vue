@@ -1,2 +1,7 @@
-<script setup lang="ts">import { formatDate, formatTerm } from '~/utils/formatters'; definePageMeta({ middleware: 'auth' }); const route = useRoute(); const { find } = useAcademicTerms(); const { data: term } = await useAsyncData(`term-${route.params.id}`, () => find(Number(route.params.id))); if (!term.value) throw createError({ statusCode: 404 })</script>
-<template><div v-if="term" class="page-shell"><PageHeader :title="`${term.academic_year} · ${formatTerm(term.term)}`" description="Academic calendar period"><template #actions><StatusBadge :status="term.status" /><BaseButton :to="`/academic-terms/${term.id}/edit`">Edit term</BaseButton></template></PageHeader><BaseCard><dl class="grid gap-5 sm:grid-cols-3"><div><dt class="text-sm text-[#60728a]">Starts</dt><dd class="mt-1 font-semibold text-[#29445f]">{{ formatDate(term.start_date) }}</dd></div><div><dt class="text-sm text-[#60728a]">Ends</dt><dd class="mt-1 font-semibold text-[#29445f]">{{ formatDate(term.end_date) }}</dd></div><div><dt class="text-sm text-[#60728a]">Status</dt><dd class="mt-1"><StatusBadge :status="term.status" /></dd></div></dl></BaseCard></div></template>
+<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+const route = useRoute()
+await navigateTo('/academic-terms/' + route.params.id + '/edit', { replace: true })
+</script>
+
+<template><div /></template>

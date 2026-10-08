@@ -1,12 +1,17 @@
 ﻿<script setup lang="ts">
-import { Plus } from '@lucide/vue'
+import { Eye, Pencil, Plus } from '@lucide/vue'
 import type { TableColumn } from '~/types/ui'
 import { recoveryTypes } from '~/types/recovery'
 
-const props = defineProps<{ title: string; description: string; columns: TableColumn[]; rows: Record<string, string | number | null | undefined>[]; basePath: string; createLabel?: string; searchPlaceholder?: string; total?: number; page?: number; lastPage?: number; perPage?: number; statusOptions?: { label: string; value: string }[]; loading?: boolean; error?: string }>()
+const props = defineProps<{ title: string; description: string; columns: TableColumn[]; rows: Record<string, string | number | null | undefined>[]; basePath: string; detailAction?: 'view-and-edit' | 'edit-only'; editSuffix?: '/edit' | ''; createLabel?: string; searchPlaceholder?: string; total?: number; page?: number; lastPage?: number; perPage?: number; statusOptions?: { label: string; value: string }[]; loading?: boolean; error?: string }>()
 const emit = defineEmits<{ refresh: [] }>()
 const { search, status, updateQuery } = useCollectionQuery()
 const recordType = computed(() => recoveryTypes.find(item => `/${item.value}` === props.basePath)?.value)
+const detailAction = computed(() => props.detailAction ?? 'view-and-edit')
+const editSuffix = computed(() => props.editSuffix ?? '/edit')
+function rowLabel(row: Record<string, string | number | null | undefined>): string {
+  return String(row.name ?? row.student ?? row.course_title ?? row.course ?? row.code ?? row.course_code ?? row.section ?? row.academic_year ?? `record #${row.id}`)
+}
 async function deleted() {
   if (props.rows.length === 1 && (props.page ?? 1) > 1) await updateQuery({ page: (props.page ?? 1) - 1 })
   emit('refresh')
@@ -25,8 +30,9 @@ async function deleted() {
         <template #cell-status="{ value }"><StatusBadge :status="String(value)" /></template>
         <template #cell-actions="{ row }">
           <div class="flex flex-wrap items-center justify-end gap-2">
-            <BaseButton :to="`${basePath}/${row.id}`" variant="ghost">View</BaseButton>
-            <DeleteRecordButton v-if="recordType" :type="recordType" :record-id="Number(row.id)" :label="String(row.name ?? row.student ?? row.course_title ?? row.code ?? row.course_code ?? row.section ?? row.academic_year ?? `record #${row.id}`)" @deleted="deleted" />
+            <BaseButton v-if="detailAction === 'view-and-edit'" :to="basePath + '/' + row.id" variant="ghost" icon-only :aria-label="'View ' + rowLabel(row)" :title="'View ' + rowLabel(row)"><Eye class="size-4" aria-hidden="true" /></BaseButton>
+            <BaseButton :to="basePath + '/' + row.id + editSuffix" variant="ghost" icon-only :aria-label="'Edit ' + rowLabel(row)" :title="'Edit ' + rowLabel(row)"><Pencil class="size-4" aria-hidden="true" /></BaseButton>
+            <DeleteRecordButton v-if="recordType" :type="recordType" :record-id="Number(row.id)" :label="rowLabel(row)" @deleted="deleted" />
           </div>
         </template>
       </DataTable>

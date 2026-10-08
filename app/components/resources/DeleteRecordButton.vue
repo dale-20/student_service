@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Trash2 } from '@lucide/vue'
 import type { ApiProblem } from '~/types/api'
 import type { RecoverableType } from '~/types/recovery'
 
@@ -31,7 +32,7 @@ async function confirm(): Promise<void> {
 
 <template>
   <div class="inline-block max-w-sm text-left">
-    <BaseButton v-if="!confirming" variant="ghost" :aria-label="`Delete ${label}`" @click="confirming = true">Delete</BaseButton>
+    <BaseButton v-if="!confirming" variant="ghost" icon-only :aria-label="`Delete ${label}`" :title="`Delete ${label}`" @click="confirming = true"><Trash2 class="size-4" aria-hidden="true" /></BaseButton>
     <div v-else class="space-y-3" @keydown.esc="!deleting && (confirming = false)">
       <p class="text-sm">Move <strong>{{ label }}</strong> to Deleted records? You can recover it later.</p>
       <p v-if="error" role="alert" class="text-sm text-red-700">{{ error }}</p>

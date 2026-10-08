@@ -1,2 +1,7 @@
-<script setup lang="ts">definePageMeta({ middleware: 'auth' }); const route = useRoute(); const { find } = useCourses(); const { data: course } = await useAsyncData(`course-${route.params.id}`, () => find(Number(route.params.id))); if (!course.value) throw createError({ statusCode: 404 })</script>
-<template><div v-if="course" class="page-shell"><PageHeader :title="course.course_code" :description="course.course_title"><template #actions><StatusBadge :status="course.status" /><BaseButton :to="`/courses/${course.id}/edit`">Edit course</BaseButton></template></PageHeader><BaseCard><dl class="grid gap-5 sm:grid-cols-3"><div><dt class="text-sm text-[#60728a]">Course code</dt><dd class="mt-1 font-semibold text-[#29445f]">{{ course.course_code }}</dd></div><div><dt class="text-sm text-[#60728a]">Units</dt><dd class="mt-1 font-semibold text-[#29445f]">{{ course.units }}</dd></div><div><dt class="text-sm text-[#60728a]">Status</dt><dd class="mt-1"><StatusBadge :status="course.status" /></dd></div></dl></BaseCard></div></template>
+<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+const route = useRoute()
+await navigateTo('/courses/' + route.params.id + '/edit', { replace: true })
+</script>
+
+<template><div /></template>
